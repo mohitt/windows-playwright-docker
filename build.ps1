@@ -5,8 +5,15 @@ if ($env:SHARE_USER_PASSWORD) {
 } else {
     $UserPassword = Read-Host -Prompt "Enter the password for the share user"
 }
+
+# Truncate password to 14 characters max (Windows net user limitation)
+if ($UserPassword.Length -gt 14) {
+    $UserPassword = $UserPassword.Substring(0, 14)
+    Write-Host "Password truncated to 14 characters due to Windows limitation"
+}
+
 net user ShareUser $UserPassword /ADD
-net share WinSxS=%windir%\WinSxS /GRANT:ShareUser,READ
+net share WinSxS=%windir%\WinSxS /GRANT:"ShareUser,READ"
 #put the UserPassword in an environment variable
 #[Environment]::SetEnvironmentVariable("ShareUserPassword", $UserPassword, [EnvironmentVariableTarget]::Machine)
 docker build -t windows-playwright:latest --build-arg SHARE_PW=$UserPassword .

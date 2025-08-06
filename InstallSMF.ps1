@@ -174,36 +174,6 @@ if (-not $InstallSuccess) {
     }
 }
 
-# Strategy 5: Try installing Visual C++ Redistributables as alternative (some media components)
-if (-not $InstallSuccess) {
-    Write-Host "Strategy 5: Installing Visual C++ Redistributables as Media Foundation alternative..."
-    try {
-        # Download and install latest Visual C++ Redistributables
-        $vcRedistUrl = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
-        $vcRedistPath = "C:\temp\vc_redist.x64.exe"
-        
-        Write-Host "   Downloading Visual C++ Redistributables..."
-        Invoke-WebRequest -Uri $vcRedistUrl -OutFile $vcRedistPath -UseBasicParsing
-        
-        Write-Host "   Installing Visual C++ Redistributables..."
-        $process = Start-Process -FilePath $vcRedistPath -ArgumentList '/quiet', '/norestart' -Wait -PassThru
-        
-        if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
-            Write-Host "✅ Strategy 5 SUCCESS: Visual C++ Redistributables installed"
-            Write-Host "   This may provide some media support for Chromium"
-            $InstallSuccess = $true
-        } else {
-            Write-Warning "❌ Strategy 5 FAILED: Visual C++ installation exit code $($process.ExitCode)"
-        }
-        
-        # Clean up
-        Remove-Item -Path $vcRedistPath -Force -ErrorAction SilentlyContinue
-    }
-    catch {
-        Write-Warning "❌ Strategy 5 FAILED: $($_.Exception.Message)"
-    }
-}
-
 # Final verification
 if ($InstallSuccess) {
     Write-Host "🎉 Media Foundation installation completed successfully!"

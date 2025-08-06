@@ -41,6 +41,7 @@ export default defineConfig({
               '--disable-backgrounding-occluded-windows',
               '--disable-renderer-backgrounding',
               '--disable-features=TranslateUI',
+              '--disable-features=MediaFoundationVideoCapture',
               '--disable-ipc-flooding-protection',
               '--no-first-run',
               '--disable-default-apps',

@@ -1,4 +1,4 @@
-FROM windows-playwright:latest
+FROM ghcr.io/mohitt/windows-playwright-docker:latest
 
 WORKDIR /app/tests
 

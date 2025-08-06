@@ -4,8 +4,8 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2022
 # Turn on Media Foundation features
 ARG SHARE_PW=
 WORKDIR /install
-COPY InstallSMF.cmd .
-RUN InstallSMF.cmd
+COPY InstallSMF.ps1 .
+RUN powershell -ExecutionPolicy Bypass -Command "& { .\InstallSMF.ps1; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }"
 
 SHELL ["powershell", "-Command"]
 

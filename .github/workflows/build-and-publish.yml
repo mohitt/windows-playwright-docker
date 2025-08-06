@@ -26,11 +26,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up Docker
-      run: |
-        # Enable Windows containers mode
-        & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchDaemon
-
     - name: Log in to Container Registry
       uses: docker/login-action@v3
       with:

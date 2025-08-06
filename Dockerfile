@@ -18,6 +18,12 @@ RUN Invoke-WebRequest https://github.com/git-for-windows/git/releases/download/v
     Start-Process .\git.exe -ArgumentList '/VERYSILENT' -Wait ; \
     Remove-Item .\git.exe
 
+# Turn on Media Foundation features
+ARG SHARE_PW=
+WORKDIR /install
+COPY InstallSMF.cmd .
+RUN InstallSMF.cmd
+
 # Set environment variables for Playwright
 ENV PLAYWRIGHT_BROWSERS_PATH=C:/ms-playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=false

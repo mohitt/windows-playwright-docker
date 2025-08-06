@@ -1,5 +1,5 @@
 # Base image with Windows and Node
-FROM mcr.microsoft.com/windows/server:ltsc2022
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
 SHELL ["powershell", "-Command"]
 
@@ -7,7 +7,6 @@ SHELL ["powershell", "-Command"]
 RUN Invoke-WebRequest https://nodejs.org/dist/v22.18.0/node-v22.18.0-x64.msi -OutFile node.msi ; \
     Start-Process msiexec.exe -ArgumentList '/qn /i node.msi' -Wait ; \
     Remove-Item node.msi
-
 
 # Install Visual C++ Redistributables (required for Chromium)
 RUN Invoke-WebRequest https://aka.ms/vs/17/release/vc_redist.x64.exe -OutFile vc_redist.x64.exe ; \
@@ -24,8 +23,8 @@ ENV PLAYWRIGHT_BROWSERS_PATH=C:/ms-playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=false
 
 RUN $env:PLAYWRIGHT_BROWSERS_PATH = 'C:/ms-playwright' ; \
-    npx playwright install chromium --with-deps; \
-    npx playwright install-deps chromium
+    npm install -g playwright; \
+    npx playwright install chromium --with-deps;
 
 
 

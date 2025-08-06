@@ -1,0 +1,9 @@
+
+WORKDIR /app/admin-ui-integration-tests
+
+# Copy and install dependencies
+COPY TCC/admin-ui-integration-tests/package*.json ./
+RUN npm install
+
+# Copy the rest of the test project
+COPY TCC/admin-ui-integration-tests/ ./

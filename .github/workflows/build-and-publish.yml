@@ -44,31 +44,11 @@ jobs:
           type=sha,prefix={{branch}}-
           type=raw,value=latest,enable={{is_default_branch}}
 
-    - name: Set ShareUser Password Environment Variable
-      run: |
-        echo "SHARE_USER_PASSWORD=${{ secrets.SHARE_USER_PASSWORD }}" >> $env:GITHUB_ENV
-      shell: pwsh
-
-    - name: Build Docker image using build.ps1
-      run: |
-        .\build.ps1
-      shell: pwsh
-      env:
-        SHARE_USER_PASSWORD: ${{ secrets.SHARE_USER_PASSWORD }}
-
-    - name: Tag and push Docker image
-      run: |
-        # Tag the image with the metadata tags
-        $tags = '${{ steps.meta.outputs.tags }}' -split '\n'
-        foreach ($tag in $tags) {
-          if ($tag.Trim()) {
-            docker tag windows-playwright:latest $tag.Trim()
-            docker push $tag.Trim()
-          }
-        }
-      shell: pwsh
-
-    - name: Clean up local images
-      run: |
-        docker image prune -f
-      shell: pwsh
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        platforms: windows/amd64

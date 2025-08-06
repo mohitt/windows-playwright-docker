@@ -1,5 +1,5 @@
-# Base image with Windows Server (full) - includes Media Foundation
-FROM mcr.microsoft.com/windows/server:ltsc2022
+# Base image with Windows Server Core (smaller, no Media Foundation)
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
 SHELL ["powershell", "-Command"]
 
